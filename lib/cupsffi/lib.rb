@@ -192,7 +192,6 @@ module CupsFFI
   # Returns
   #  - job number or 0 on error
   attach_function 'cupsPrintFile', [ :string, :string, :string, :int, :pointer ], :int, blocking: true
-
   attach_function 'cupsPrintFile2', [ :pointer, :string, :string, :string, :int, :pointer ], :int, blocking: true
 
   attach_function 'cupsLastErrorString', [], :string, blocking: true
@@ -201,7 +200,6 @@ module CupsFFI
   #  - printer name
   #  - job id
   attach_function 'cupsCancelJob', [:string, :int], :void, blocking: true
-
   attach_function 'cupsCancelJob2', [:pointer, :string, :int], :void, blocking: true
 
   # Parameters
@@ -212,6 +210,7 @@ module CupsFFI
   # Returns:
   #  - number of jobs
   attach_function 'cupsGetJobs', [:pointer, :string, :int, :int], :int, blocking: true
+  attach_function 'cupsGetJobs2', [:pointer, :pointer, :string, :int, :int], :int, blocking: true
 
   # Parameters
   #  - number of jobs

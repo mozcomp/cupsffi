@@ -31,7 +31,11 @@ class CupsJob
   def cancel(printer = nil)
     raise "cancel parameter must be a CupsPrinter or String" unless printer.nil? || [CupsPrinter, String].include?(printer.class)
     p = printer || @printer
-    r = CupsFFI::cupsCancelJob(p.kind_of?(String) ? p : p.name, @id)
+    if p.kind_of?(String)
+      r = CupsFFI::cupsCancelJob(p.kind_of?(String) ? p : p.name, @id)
+    else
+      r = CupsFFI::cupsCancelJob2(p.connection, p.kind_of?(String) ? p : p.name, @id)
+    end
     raise CupsFFI::cupsLastErrorString() if r == 0
   end
 
@@ -39,7 +43,11 @@ class CupsJob
     raise "status parameter must be a CupsPrinter or String" unless printer.nil? || [CupsPrinter, String].include?(printer.class)
     pointer = FFI::MemoryPointer.new :pointer
     p = printer || @printer
-    job_count = CupsFFI::cupsGetJobs(pointer, p.kind_of?(String) ? p : p.name, 0, CupsFFI::CUPS_WHICHJOBS_ALL)
+    if p.kind_of?(String)
+      job_count = CupsFFI::cupsGetJobs(pointer, p.kind_of?(String) ? p : p.name, 0, CupsFFI::CUPS_WHICHJOBS_ALL)
+    else
+      job_count = CupsFFI::cupsGetJobs2(p.connection, pointer, p.kind_of?(String) ? p : p.name, 0, CupsFFI::CUPS_WHICHJOBS_ALL)
+    end
 
     free_jobs = lambda do
       CupsFFI::cupsFreeJobs(job_count, pointer.get_pointer(0))
