@@ -224,11 +224,11 @@ class CupsPrinter
 
   def validate_options(options)
     begin
-      Rails.logger.debug "validate_options"
+      puts "validate_options"
       ppd = CupsPPD.new(@name, @connection)
       validate_ppd_options(ppd, options)
     rescue => ex
-      Rails.logger.error "validate_options - no ppd"
+      puts "validate_options - no ppd"
       validate_basic_options(options)
     end
   end
