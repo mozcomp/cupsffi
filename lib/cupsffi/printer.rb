@@ -235,7 +235,7 @@ class CupsPrinter
     options.each do |key,value|
       key_string = key.to_s
       # Accept common CUPS options
-      next if ['copies', 'landscape'].include?(key_string)
+      next if ['copies', 'landscape', 'raw'].include?(key_string)
 
       raise "Invalid option #{key} for printer #{@name}" if ppd_options[key_string].nil?
       choices = ppd_options[key_string][:choices].map{|c| c[:choice]}
