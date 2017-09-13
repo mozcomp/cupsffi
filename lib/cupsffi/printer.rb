@@ -125,7 +125,7 @@ class CupsPrinter
 
     options_pointer = nil
     num_options = 0
-    unless options.empty?
+    unless options.blank?
       validate_options(options)
       options_pointer = FFI::MemoryPointer.new :pointer
       options.map do |key,value|
@@ -149,7 +149,7 @@ class CupsPrinter
   def print_data(data, mime_type, options = {})
     options_pointer = nil
     num_options = 0
-    unless options.empty?
+    unless options.blank?
       validate_options(options)
       options_pointer = FFI::MemoryPointer.new :pointer
       options.map do |key,value|
@@ -221,9 +221,26 @@ class CupsPrinter
 
 
   private
-  def validate_options(options)
-    ppd = CupsPPD.new(@name, @connection)
 
+  def validate_options(options)
+    begin
+      ppd = CupsPPD.new(@name, @connection)
+      validate_ppd_options(ppd, options)
+    rescue
+      validate_basic_options(options)
+    end
+  end
+
+  def validate_basic_options(options)
+    options.each do |key, _value|
+      key_string = key.to_s
+      # Accept common CUPS options
+      next if ['raw'].include?(key_string)
+    end
+    raise "Invalid option #{key} for printer #{@name}" if ppd_options[key_string].nil?
+  end
+
+  def validate_ppd_options(ppd, options)
     # Build a hash of the ppd options for quick lookup
     ppd_options = {}
     ppd.options.each do |ppd_option|
