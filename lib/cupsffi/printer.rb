@@ -224,11 +224,9 @@ class CupsPrinter
 
   def validate_options(options)
     begin
-      puts "validate_options"
       ppd = CupsPPD.new(@name, @connection)
       validate_ppd_options(ppd, options)
     rescue => ex
-      puts "validate_options - no ppd"
       validate_basic_options(options)
     end
   end
@@ -238,8 +236,8 @@ class CupsPrinter
       key_string = key.to_s
       # Accept common CUPS options
       next if ['raw'].include?(key_string)
+      raise "Invalid option #{key} for printer #{@name}"
     end
-    raise "Invalid option #{key} for printer #{@name}" if ppd_options[key_string].nil?
   end
 
   def validate_ppd_options(ppd, options)
