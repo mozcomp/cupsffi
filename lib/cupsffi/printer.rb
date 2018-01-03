@@ -116,7 +116,7 @@ class CupsPrinter
           when "5" then :stopped
           else :unknown
         end,
-      :reasons => o['printer-state-reasons'].split(/,/)
+      :reasons => o['printer-state-reasons'] ? o['printer-state-reasons'].split(/,/) : ''
     }
   end
 
@@ -226,7 +226,7 @@ class CupsPrinter
     begin
       ppd = CupsPPD.new(@name, @connection)
       validate_ppd_options(ppd, options)
-    rescue => ex
+    rescue
       validate_basic_options(options)
     end
   end
