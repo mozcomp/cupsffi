@@ -1,0 +1,19 @@
+PATH
+  remote: .
+  specs:
+    cupsffi (0.1.7)
+      ffi
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    ffi (1.14.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  cupsffi!
+
+BUNDLED WITH
+   2.1.4
